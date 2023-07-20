@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 11:59:01 by akhellad          #+#    #+#             */
-/*   Updated: 2023/06/09 17:09:39 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/07/20 23:50:49 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ void	*philo_thread(void *arg)
 	return (NULL);
 }
 
-salut
-
 int main(int ac, char **av)
 {
 	int philo_num;
@@ -74,7 +72,7 @@ int main(int ac, char **av)
 	t_philo *philos;
 	pthread_mutex_t output_mutex;
 
-	if (ac == 4 || ac == 5)
+	if (ac == 4)
 	{
 		i = 0;
 		philo_num = ft_atoi(av[1]);
@@ -96,15 +94,6 @@ int main(int ac, char **av)
             	return (1);
         	}
         	i++;
-    	}
-    	if (ac == 5)
-    	{
-        	if (pthread_mutex_init(&forks[philo_num], NULL) != 0)  // Initialisation du mutex supplémentaire pour le dernier philosophe
-        	{
-           		free(forks);
-            	free(philos);
-            	return (1);
-        	}
     	}
 		i = 0;
 		if (pthread_mutex_init(&output_mutex, NULL) != 0)
