@@ -64,6 +64,8 @@ void	*philo_thread(void *arg)
 	return (NULL);
 }
 
+salut
+
 int main(int ac, char **av)
 {
 	int philo_num;
