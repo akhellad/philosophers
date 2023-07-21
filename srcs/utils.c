@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 14:11:10 by akhellad          #+#    #+#             */
-/*   Updated: 2023/06/09 16:55:07 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/07/21 01:45:03 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,35 +51,12 @@ int	ft_atoi(const char *nptr)
 	return (ft_atoi2(nptr1, fin, neg));
 }
 
-void	cleanall(t_philo *philos, pthread_mutex_t *forks, int num_philos)
+long	get_time(void)
 {
-	int i;
+	struct timeval	now;
 
-	i = 0;
-	while (i < num_philos)
-	{
-		pthread_join(philos[i].thread, NULL);
-		pthread_cancel(philos[i].thread);
-		i ++;
-	}
-	i = 0;
-	while (i < num_philos)
-	{
-		pthread_mutex_destroy(&forks[i]);
-		i ++;
-	}
-	free(forks);
-	free(philos);
+	gettimeofday(&now, NULL);
+	return ((now.tv_sec * 1000) + (now.tv_usec / 1000));
 }
 
-void	print_status(pthread_mutex_t *mutex, int id, const char *message)
-{
-	struct timeval	tv;
-	long			time_in_ms;
 
-	gettimeofday(&tv, NULL);
-	time_in_ms = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-	pthread_mutex_lock(mutex);
-	printf("%ld %d %s\n", time_in_ms, id, message);
-	pthread_mutex_unlock(mutex);
-}

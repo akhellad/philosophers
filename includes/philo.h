@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 11:58:53 by akhellad          #+#    #+#             */
-/*   Updated: 2023/06/09 17:04:56 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/07/21 03:29:02 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,62 @@
 # include <sys/time.h>
 # include <stdio.h>
 
-typedef struct s_fork
+typedef struct s_info
 {
-	int				id;
-	pthread_mutex_t	*mutex;
-}	t_fork;
+	int				philo_nbr;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				time_to_die;
+	int 			must_eat_time;
+	pthread_mutex_t	print_mutex;
+	int				program_end;
+}	t_info;
 
 typedef struct s_philo
 {
 	int				id;
-	t_fork		left_fork;
-	t_fork		right_fork;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				time_to_die;
-	pthread_t		thread;
-	pthread_mutex_t *output_mutex;
-	pthread_mutex_t death_flag_mutex;
-	int				is_dead;
-}	t_philo;
+	int				meals;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+	pthread_t		thread_id;
+	long			last_meal;
+	long			start_time;
+	t_info			*infos;
+}		t_philo;
 
+typedef enum e_event_id {
+	DEAD,
+	EAT,
+	THINK,
+	SLEEP,
+	FORK,
+}				t_event_id;
+
+/*args.c*/
+int init_infos(t_info *infos, char **argv);
+
+/*utils.c*/
 int	ft_atoi(const char *nptr);
-void	cleanall(t_philo *philos, pthread_mutex_t *forks, int num_philos);
-void	print_status(pthread_mutex_t *mutex, int id, const char *message);
+long	get_time();
+
+/*destroy.c*/
+void    destroy(t_info *infos, pthread_mutex_t *forks, t_philo *philos);
+int	failure(t_info *infos, pthread_mutex_t *forks, t_philo *philos, char *msg);
+
+/*forks.c*/
+pthread_mutex_t *init_forks(t_info *infos);
+
+/*philo_init.c*/
+t_philo *init_philos(t_info *infos, pthread_mutex_t *forks);
+
+/*print.c*/
+void    print(t_philo *philo, t_event_id event_id);
+
+/*philo_life.c*/
+void *philo_life(void *_philo);
+
+/*threads.c*/
+int threads_life(t_info *infos, t_philo *philos, pthread_mutex_t *forks);
+
 
 #endif

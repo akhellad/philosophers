@@ -6,19 +6,28 @@
 #    By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/09 11:58:56 by akhellad          #+#    #+#              #
-#    Updated: 2023/06/09 16:09:45 by akhellad         ###   ########.fr        #
+#    Updated: 2023/07/21 03:15:51 by akhellad         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= philo
 
-SRCS 	= srcs/philo.c srcs/utils.c
+SRCS 	= srcs/philo.c \
+		srcs/utils.c \
+		srcs/args.c \
+		srcs/destroy.c \
+		srcs/forks.c \
+		srcs/philo_init.c \
+		srcs/threads.c	\
+		srcs/print.c \
+		srcs/philo_life.c 
+
 OBJS 	= ${SRCS:.c=.o}
 
 HEADER	= -Iincludes
 
 CC 		= gcc
-CFLAGS 	= -Wall -Wextra -Werror -g3 -pthread
+CFLAGS 	= -g3 -pthread
 
 .c.o:		%.o : %.c
 					gcc ${CFLAGS} ${HEADER} -c $< -o $(<:.c=.o)
