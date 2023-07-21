@@ -25,7 +25,7 @@ typedef struct s_info
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_to_die;
-	int 			must_eat_time;
+	int				must_eat_time;
 	pthread_mutex_t	print_mutex;
 	int				program_end;
 }	t_info;
@@ -51,30 +51,33 @@ typedef enum e_event_id {
 }				t_event_id;
 
 /*args.c*/
-int init_infos(t_info *infos, char **argv);
+int				init_infos(t_info *infos, char **argv);
+int				check_args(int ac, char **av);
 
 /*utils.c*/
-int	ft_atoi(const char *nptr);
-long	get_time();
+int				ft_atoi(const char *nptr);
+long			get_time(void);
 
 /*destroy.c*/
-void    destroy(t_info *infos, pthread_mutex_t *forks, t_philo *philos);
-int	failure(t_info *infos, pthread_mutex_t *forks, t_philo *philos, char *msg);
+void			destroy(t_info *infos, pthread_mutex_t *forks, t_philo *philos);
+int				failure(t_info *infos, pthread_mutex_t *forks, t_philo *philos, \
+						char *msg);
 
 /*forks.c*/
-pthread_mutex_t *init_forks(t_info *infos);
+pthread_mutex_t	*init_forks(t_info *infos);
 
 /*philo_init.c*/
-t_philo *init_philos(t_info *infos, pthread_mutex_t *forks);
+t_philo			*init_philos(t_info *infos, pthread_mutex_t *forks);
 
 /*print.c*/
-void    print(t_philo *philo, t_event_id event_id);
+void			print(t_philo *philo, t_event_id event_id);
 
 /*philo_life.c*/
-void *philo_life(void *_philo);
+void			*philo_life(void *_philo);
 
 /*threads.c*/
-int threads_life(t_info *infos, t_philo *philos, pthread_mutex_t *forks);
-
+int				threads_life(t_info *infos, t_philo *philos, \
+				pthread_mutex_t *forks);
+void			satisfied(t_info *infos);
 
 #endif

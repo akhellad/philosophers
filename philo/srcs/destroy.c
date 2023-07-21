@@ -22,16 +22,16 @@ size_t	ft_strlen(char *str)
 	return (i);
 }
 
-void    destroy(t_info *infos, pthread_mutex_t *forks, t_philo *philos)
+void	destroy(t_info *infos, pthread_mutex_t *forks, t_philo *philos)
 {
-    int i;
+	int	i;
 
-    if (infos)
-        pthread_mutex_destroy(&infos->print_mutex);
-    if (forks)
-    {
-        i = 0;
-        while (i < infos->philo_nbr)
+	if (infos)
+		pthread_mutex_destroy(&infos->print_mutex);
+	if (forks)
+	{
+		i = 0;
+		while (i < infos->philo_nbr)
 		{
 			pthread_mutex_destroy(&forks[i]);
 			philos[i].left_fork = NULL;
@@ -40,7 +40,7 @@ void    destroy(t_info *infos, pthread_mutex_t *forks, t_philo *philos)
 		}
 		free(forks);
 		forks = NULL;
-    }
+	}
 	if (philos)
 	{
 		free(philos);

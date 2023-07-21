@@ -27,10 +27,10 @@ OBJS 	= ${SRCS:.c=.o}
 HEADER	= -Iincludes
 
 CC 		= gcc
-CFLAGS 	= -g3 -pthread
+CFLAGS 	= -Wall -Wextra -g3 -pthread
 
 .c.o:		%.o : %.c
-					gcc ${CFLAGS} ${HEADER} -c $< -o $(<:.c=.o)
+					@gcc ${CFLAGS} ${HEADER} -c $< -o $(<:.c=.o)
 					@echo "\033[33;32m[OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
 
 all: 		${NAME}

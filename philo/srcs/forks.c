@@ -12,9 +12,9 @@
 
 #include "../includes/philo.h"
 
-void free_forks(pthread_mutex_t *forks, int max)
+void	free_forks(pthread_mutex_t *forks, int max)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i <= max)
@@ -25,7 +25,7 @@ void free_forks(pthread_mutex_t *forks, int max)
 	free(forks);
 }
 
-pthread_mutex_t *init_forks(t_info *infos)
+pthread_mutex_t	*init_forks(t_info *infos)
 {
 	pthread_mutex_t	*forks;
 	int				i;

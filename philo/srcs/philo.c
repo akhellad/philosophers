@@ -12,21 +12,18 @@
 
 #include "../includes/philo.h"
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_info			info;
-	pthread_mutex_t *forks;
-	t_philo 		*philos;
+	pthread_mutex_t	*forks;
+	t_philo			*philos;
 
-	if (ac == 5 || ac == 6)
-	{
-		if (init_infos(&info, av))
-			return (0);
-		forks = init_forks(&info);
-		philos = init_philos(&info, forks);
-		if (!threads_life(&info, philos, forks))
-			return (1);
-		destroy(&info, forks, philos);
-	}
+	if (!check_args(ac, av) || init_infos(&info, av))
+		return (0);
+	forks = init_forks(&info);
+	philos = init_philos(&info, forks);
+	if (!threads_life(&info, philos, forks))
+		return (1);
+	destroy(&info, forks, philos);
 	return (0);
 }

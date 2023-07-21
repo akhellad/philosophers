@@ -12,9 +12,9 @@
 
 #include "../includes/philo.h"
 
-t_philo *init_philos(t_info *infos, pthread_mutex_t *forks)
+t_philo	*init_philos(t_info *infos, pthread_mutex_t *forks)
 {
-    t_philo *philos;
+	t_philo	*philos;
 	int		i;
 
 	philos = malloc(infos->philo_nbr * sizeof(t_philo));
@@ -24,7 +24,7 @@ t_philo *init_philos(t_info *infos, pthread_mutex_t *forks)
 	while (i < infos->philo_nbr)
 	{
 		philos[i].id = i + 1;
-		philos[i].meals = -1;
+		philos[i].meals = 0;
 		philos[i].left_fork = &forks[i];
 		philos[i].right_fork = &forks[(i + 1) % infos->philo_nbr];
 		philos[i].last_meal = get_time();
