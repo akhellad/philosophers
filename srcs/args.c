@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 00:48:38 by akhellad          #+#    #+#             */
-/*   Updated: 2023/07/21 01:36:20 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/07/21 05:19:27 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ int init_infos(t_info *infos, char **argv)
         failure(NULL, NULL, NULL, ERR_0);
         return (1);
     }
+    infos->program_end = 0;
     return (0);
 }

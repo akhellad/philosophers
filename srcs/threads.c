@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 02:19:52 by akhellad          #+#    #+#             */
-/*   Updated: 2023/07/21 03:27:22 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/07/21 05:32:37 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,16 @@ int threads_life(t_info *infos, t_philo *philos, pthread_mutex_t *forks)
 			failure(infos, forks, philos, "Erreur lors de la creations des threads");
 			return (0);
 		}
-		check_all(philos, infos);
-		i = -1;
-		while (++i < infos->philo_nbr)
-		{
-			if (pthread_join(philos[i].thread_id, NULL) != 0)
-			{
-				failure(infos, forks, philos, "Erreur lors du joignement des threads");
-				return (0);
-			}
-		}
-		return (1);
 	}
+	check_all(philos, infos);
+	i = -1;
+	while (++i < infos->philo_nbr)
+	{
+		if (pthread_join(philos[i].thread_id, NULL) != 0)
+		{
+			failure(infos, forks, philos, "Erreur lors du joignement des threads");
+			return (0);
+		}
+	}
+	return (1);
 }

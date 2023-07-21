@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 01:38:30 by akhellad          #+#    #+#             */
-/*   Updated: 2023/07/21 01:47:23 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/07/21 05:34:19 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_philo *init_philos(t_info *infos, pthread_mutex_t *forks)
 	while (i < infos->philo_nbr)
 	{
 		philos[i].id = i + 1;
-		philos[i].meals = 0;
+		philos[i].meals = -1;
 		philos[i].left_fork = &forks[i];
 		philos[i].right_fork = &forks[(i + 1) % infos->philo_nbr];
 		philos[i].last_meal = get_time();
