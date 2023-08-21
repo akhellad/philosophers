@@ -5,79 +5,77 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/09 11:58:53 by akhellad          #+#    #+#             */
-/*   Updated: 2023/07/21 03:29:02 by akhellad         ###   ########.fr       */
+/*   Created: 2023/08/21 10:52:32 by akhellad          #+#    #+#             */
+/*   Updated: 2023/08/21 13:13:39 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
+# include <stdio.h>
+# include <string.h>
 # include <pthread.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <limits.h>
 # include <sys/time.h>
-# include <stdio.h>
 
-typedef struct s_info
+# define FORK "has taken a fork"
+# define EAT "is eating"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
+# define DIE "died"
+# define LEFT 0
+# define RIGHT 1
+
+typedef struct s_infos
 {
-	int				philo_nbr;
+	int				num;
+	int				ready;
+	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				time_to_die;
-	int				must_eat_time;
-	pthread_mutex_t	print_mutex;
-	int				program_end;
-}	t_info;
+	int				max_iter;
+	int				check_meal;
+	int				over;
+	long int		start;
+	pthread_mutex_t	*death;
+	pthread_mutex_t	*fork;
+}	t_infos;
 
 typedef struct s_philo
 {
 	int				id;
-	int				meals;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
-	pthread_t		thread_id;
-	long			last_meal;
-	long			start_time;
-	t_info			*infos;
-}		t_philo;
+	int				dead;
+	int				iter_num;
+	long int		thread_start;
+	long int		meal;
+	pthread_t		life_tid;
+	pthread_mutex_t	*lf;
+	pthread_mutex_t	*rf;
+	t_infos			*infos;
+}	t_philo;
 
-typedef enum e_event_id {
-	DEAD,
-	EAT,
-	THINK,
-	SLEEP,
-	FORK,
-}				t_event_id;
+/*ft_atoi.c*/
+int			ft_atoi(const char *str);
 
-/*args.c*/
-int				init_infos(t_info *infos, char **argv);
-int				check_args(int ac, char **av);
+/*main.c*/
+int			init_philo(t_infos *infos, t_philo *philo);
+
+/*time.c*/
+int			ft_usleep(long int time);
+long int	time_now(void);
 
 /*utils.c*/
-int				ft_atoi(const char *nptr);
-long			get_time(void);
+int			error_msg(char *s, t_infos *infos, t_philo *p, int malloc);
+void		print(t_philo *p, char *action);
 
-/*destroy.c*/
-void			destroy(t_info *infos, pthread_mutex_t *forks, t_philo *philos);
-int				failure(t_info *infos, pthread_mutex_t *forks, t_philo *philos, \
-						char *msg);
-
-/*forks.c*/
-pthread_mutex_t	*init_forks(t_info *infos);
-
-/*philo_init.c*/
-t_philo			*init_philos(t_info *infos, pthread_mutex_t *forks);
-
-/*print.c*/
-void			print(t_philo *philo, t_event_id event_id);
-
-/*philo_life.c*/
-void			*philo_life(void *_philo);
+/*philo.c*/
+int			philo(t_infos *infos);
 
 /*threads.c*/
-int				threads_life(t_info *infos, t_philo *philos, \
-				pthread_mutex_t *forks);
-void			satisfied(t_info *infos);
+int			check_death(t_philo *p);
+void		*threads(void *job);
 
 #endif

@@ -5,91 +5,72 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/21 02:19:52 by akhellad          #+#    #+#             */
-/*   Updated: 2023/07/21 05:32:37 by akhellad         ###   ########.fr       */
+/*   Created: 2023/08/21 11:12:34 by akhellad          #+#    #+#             */
+/*   Updated: 2023/08/21 13:14:56 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-#define ERR_0 "Erreur lors de la creations des threads"
 
-int	eat_check(t_philo *philo)
+int	someone_died(t_philo *p)
 {
-	if (((get_time() - philo->last_meal) >= philo->infos->time_to_die))
-		return (1);
-	else
-		return (0);
+	print(p, DIE);
+	p->infos->over = 1;
+	p->dead = 1;
+	pthread_mutex_unlock(p->lf);
+	pthread_mutex_unlock(p->rf);
+	return (1);
 }
 
-void	satisfied(t_info *infos)
+int	check_death(t_philo *p)
 {
-	infos->program_end = 1;
-	printf("All the philosophers have eaten %d meals\n", infos->must_eat_time);
-	pthread_mutex_unlock(&infos->print_mutex);
-}
+	long int	now;
 
-int	death(t_info *infos, t_philo *philo, int *satisfied_philos)
-{
-	if (infos->must_eat_time > 0 && philo->meals >= infos->must_eat_time + 1)
-		*satisfied_philos += 1;
-	if (eat_check(philo))
+	pthread_mutex_lock(p->infos->death);
+	now = time_now() - p->meal;
+	if (now >= p->infos->time_to_die)
 	{
-		pthread_mutex_unlock(&infos->print_mutex);
-		print(philo, DEAD);
-		pthread_mutex_lock(&infos->print_mutex);
-		infos->program_end = 1;
-		pthread_mutex_unlock(&infos->print_mutex);
-		return (1);
+		pthread_mutex_unlock(p->infos->death);
+		return (someone_died(p));
 	}
+	pthread_mutex_unlock(p->infos->death);
 	return (0);
 }
 
-void	check_all(t_philo *philos, t_info *infos)
+void	sleep_and_think(t_philo *p)
 {
-	int	satisfied_philos;
-	int	i;
-
-	satisfied_philos = 0;
-	while (1)
-	{
-		i = -1;
-		pthread_mutex_lock(&infos->print_mutex);
-		while (++i < infos->philo_nbr)
-		{
-			if (death(infos, &philos[i], &satisfied_philos))
-				return ;
-		}
-		if (satisfied_philos == infos->philo_nbr)
-			return (satisfied(infos));
-		pthread_mutex_unlock(&infos->print_mutex);
-	}
+	ft_usleep(p->infos->time_to_sleep);
+	print(p, SLEEP);
+	print(p, THINK);
 }
 
-int	threads_life(t_info *infos, t_philo *philos, pthread_mutex_t *forks)
+void	eat(t_philo *p)
 {
-	int	i;
+	pthread_mutex_lock(p->lf);
+	print(p, FORK);
+	pthread_mutex_lock(p->rf);
+	print(p, FORK);
+	p->meal = time_now();
+	ft_usleep(p->infos->time_to_eat);
+	print(p, EAT);
+	p->iter_num++;
+	pthread_mutex_unlock(p->lf);
+	pthread_mutex_unlock(p->rf);
+}
 
-	i = -1;
-	while (++i < infos->philo_nbr)
+void	*threads(void *job)
+{
+	t_philo	*p;
+
+	p = (t_philo *)job;
+	while (!p->infos->ready)
+		continue ;
+	if (p->id & 1)
+		ft_usleep(p->infos->time_to_eat * 0.9 + 1);
+	while (!p->infos->over)
 	{
-		philos[i].start_time = get_time();
-		if (pthread_create(&philos[i].thread_id, NULL, \
-			philo_life, (void *)&philos[i]) != 0)
-		{
-			failure(infos, forks, philos, ERR_0);
-			return (0);
-		}
+		eat(p);
+		sleep_and_think(p);
 	}
-	check_all(philos, infos);
-	i = -1;
-	while (++i < infos->philo_nbr)
-	{
-		if (pthread_join(philos[i].thread_id, NULL) != 0)
-		{
-			failure(infos, forks, philos, \
-			"Erreur lors du joignement des threads");
-			return (0);
-		}
-	}
-	return (1);
+	return (NULL);
 }
