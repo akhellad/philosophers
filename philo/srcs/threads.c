@@ -39,8 +39,8 @@ int	check_death(t_philo *p)
 
 void	sleep_and_think(t_philo *p)
 {
-	ft_usleep(p->infos->time_to_sleep);
 	print(p, SLEEP);
+	ft_usleep(p->infos->time_to_sleep);
 	print(p, THINK);
 }
 
@@ -51,8 +51,8 @@ void	eat(t_philo *p)
 	pthread_mutex_lock(p->rf);
 	print(p, FORK);
 	p->meal = time_now();
-	ft_usleep(p->infos->time_to_eat);
 	print(p, EAT);
+	ft_usleep(p->infos->time_to_eat);
 	p->iter_num++;
 	pthread_mutex_unlock(p->lf);
 	pthread_mutex_unlock(p->rf);
